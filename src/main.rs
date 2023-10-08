@@ -1,8 +1,8 @@
-use crate::core::errors::token_err::TokenErr;
+use errors::ScanErr;
+use tokenizer::{Tokenizer, Token};
 
-use crate::core::lexer::tokenizer::Lexer;
-
-mod core;
+mod errors;
+mod tokenizer;
 
 fn main() {
     match run() {
@@ -11,13 +11,13 @@ fn main() {
     }
 }
 
-fn run() -> Result<(), TokenErr> {
-    let code = "1 + g1 - 2 * 5 + 88".to_string();
+fn run() -> Result<(), ScanErr> {
+    let code = "266 + 3 * 44 - 5 / 222".to_string();
 
-    let lexer = Lexer { code };
+    let mut lexer = Tokenizer { code, start: 0, current: 0 };
 
-    let line = lexer.tokenize()?;
-
+    let line: Vec<Token> = lexer.scan_tokens()?;
+    
     for lexeme in &line {
         println!("{:?}", lexeme);
     }
